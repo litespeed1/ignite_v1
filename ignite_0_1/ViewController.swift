@@ -16,7 +16,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var task3: NSTextField!
     @IBOutlet weak var task4: NSTextField!
     @IBOutlet weak var task5: NSTextField!
-    @IBOutlet weak var test1: NSTextField!
+    
     @IBOutlet weak var test2: NSScrollView!
     
     @IBOutlet weak var bar_test1: NSTextField!
@@ -33,23 +33,23 @@ class ViewController: NSViewController {
         }
     }
 
-//initialize variables for next two functions...does it need to be in function call or can it sit above?
+//Set dummy values for tasks to help with display test
     
-    var focus_list = ["task1","task2"]
+    var focus_list = ["task1","task2","task3","task4","task5","task6"]
     
     @IBAction func return_test(_ sender: Any) {
         var name = next_step.stringValue
         if name.isEmpty {
             name = "Please enter your next step in the field below."
         }
-        let item = "Next Step: \(name)!"
-        test1.stringValue = item
+        let item = name
+
         next_step.stringValue = ""
         task1.stringValue = item
-        task2.stringValue = item
-        task3.stringValue = item
-        task4.stringValue = item
-        task5.stringValue = item
+        task2.stringValue = focus_list[1]
+        task3.stringValue = focus_list[2]
+        task4.stringValue = focus_list[3]
+        task5.stringValue = focus_list[4]
 
 //        bar_test1.textValue = item
     }
@@ -60,7 +60,7 @@ class ViewController: NSViewController {
             name = "Please enter your next step in the field below."
         }
         let item = "Next Step: \(name)!"
-        test1.stringValue = item
+
         next_step.stringValue = ""
         task1.stringValue = focus_list [0]
     }
