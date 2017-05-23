@@ -799,6 +799,15 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MIN-xS-XeO">
+                                <rect key="frame" x="18" y="149" width="330" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="Enter Next Step Below:" id="Gre-uU-2gp">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <touchBar key="touchBar" id="fou-jr-6a3">
@@ -807,6 +816,7 @@
                                 <viewController key="viewController" id="Jw2-yc-Rrs">
                                     <textField key="view" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhq-Ft-BTw">
                                         <rect key="frame" x="0.0" y="0.0" width="297" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" borderStyle="bezel" alignment="left" title="Label" drawsBackground="YES" id="jJv-bd-GLI">
                                             <font key="font" usesAppearanceFont="YES"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -819,15 +829,15 @@
                         </touchBarItems>
                     </touchBar>
                     <connections>
-                        <outlet property="Task3" destination="gZt-hU-jc0" id="laG-5C-h4j"/>
-                        <outlet property="Task4" destination="Ya6-Lt-ioO" id="HuM-uz-w2A"/>
-                        <outlet property="Task5" destination="gfi-Gb-g5L" id="2If-tW-8QG"/>
                         <outlet property="bar_test1" destination="lhq-Ft-BTw" id="g0w-YJ-iyA"/>
+                        <outlet property="checkbox1" destination="yOw-U8-E5w" id="6Dh-yt-rUn"/>
+                        <outlet property="error_label" destination="MIN-xS-XeO" id="MWo-ZD-ecS"/>
                         <outlet property="next_step" destination="6Oe-3L-Bhi" id="uUU-TL-OpU"/>
-                        <outlet property="task1" destination="g48-e6-mUe" id="G3W-Ms-k1i"/>
-                        <outlet property="task2" destination="Ltk-Pa-8t3" id="q37-Kw-ztB"/>
-                        <outlet property="task3" destination="gZt-hU-jc0" id="2sO-nd-Rg1"/>
-                        <outlet property="task5" destination="gfi-Gb-g5L" id="JMY-5G-ktd"/>
+                        <outlet property="ns1" destination="g48-e6-mUe" id="INa-QW-vF2"/>
+                        <outlet property="ns2" destination="Ltk-Pa-8t3" id="MJ9-Em-wJn"/>
+                        <outlet property="ns3" destination="gZt-hU-jc0" id="fpD-WY-99h"/>
+                        <outlet property="ns4" destination="Ya6-Lt-ioO" id="6fE-zQ-o6Q"/>
+                        <outlet property="ns5" destination="gfi-Gb-g5L" id="Qm2-sb-wSN"/>
                         <outlet property="test2" destination="oQ5-YQ-JXt" id="vBF-l3-YAg"/>
                     </connections>
                 </viewController>

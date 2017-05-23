@@ -11,11 +11,13 @@ import Cocoa
 class ViewController: NSViewController {
 
     @IBOutlet weak var next_step: NSTextField!
-    @IBOutlet weak var task1: NSTextField!
-    @IBOutlet weak var task2: NSTextField!
-    @IBOutlet weak var task3: NSTextField!
-    @IBOutlet weak var task4: NSTextField!
-    @IBOutlet weak var task5: NSTextField!
+    @IBOutlet weak var ns1: NSTextField!
+    @IBOutlet weak var ns2: NSTextField!
+    @IBOutlet weak var ns3: NSTextField!
+    @IBOutlet weak var ns4: NSTextField!
+    @IBOutlet weak var ns5: NSTextField!
+    @IBOutlet weak var checkbox1: NSButton!
+    @IBOutlet weak var error_label: NSTextField!
     
     @IBOutlet weak var test2: NSScrollView!
     
@@ -35,34 +37,66 @@ class ViewController: NSViewController {
 
 //Set dummy values for tasks to help with display test
     
-    var focus_list = ["task1","task2","task3","task4","task5","task6"]
+    var ns_list = ["next step 1","next step 2","next step 3","next step 4","next step 5","next step 6"]
     
+//    var ns_list = [String?]()
+    
+    var ns_complete = [String?]()
+    
+//Refresh Display of next steps
+    func ns_refresh() {
+        for index in 0...5{
+            if ns_list[index] == nil{
+                ns_list[index] = ""
+                print (ns_list[index])
+            }
+        }
+        
+        //refreshes 5 display fields
+/*        ns1.stringValue = ns_list[0]!
+        ns2.stringValue = ns_list[1]!
+        ns3.stringValue = ns_list[2]!
+        ns4.stringValue = ns_list[3]!
+        ns5.stringValue = ns_list[4]!
+*/
+        ns1.stringValue = ns_list[0]
+        ns2.stringValue = ns_list[1]
+        ns3.stringValue = ns_list[2]
+        ns4.stringValue = ns_list[3]
+        ns5.stringValue = ns_list[4]
+
+        return
+    }
+
+// Action on hitting enter key while in text entry field
     @IBAction func return_test(_ sender: Any) {
         var name = next_step.stringValue
         if name.isEmpty {
-            name = "Please enter your next step in the field below."
+            error_label.stringValue = "Please enter your next step in the field below:"
         }
-        let item = name
-
-        next_step.stringValue = ""
-        task1.stringValue = item
-        task2.stringValue = focus_list[1]
-        task3.stringValue = focus_list[2]
-        task4.stringValue = focus_list[3]
-        task5.stringValue = focus_list[4]
+        else {
+            let item = name
+            ns_list.insert(item, at:0)
+            next_step.stringValue = ""
+        }
+        
+        ns_refresh()
 
 //        bar_test1.textValue = item
     }
-    
+ 
+// Action on clicking "enter" button
     @IBAction func ns_button(_ sender: Any) {
         var name = next_step.stringValue
         if name.isEmpty {
             name = "Please enter your next step in the field below."
         }
-        let item = "Next Step: \(name)!"
-
+        let item = name
+        ns_list.insert(item, at:0)
         next_step.stringValue = ""
-        task1.stringValue = focus_list [0]
+        
+        ns_refresh()
+
     }
 
 //Insert action to strikethrough task when checkbox is clicked on...also would like to do when task has focus and enter is hit.  Should also reverse when clicked a second time.  current issue is it just posts the text "strikethrough"
@@ -77,8 +111,17 @@ class ViewController: NSViewController {
         let labelString = NSAttributedString(string: "Hello, playground", attributes: strikeThroughAttributes)
         multline_test.stringValue = labelString
 */
-       task1.stringValue = "This is a cleared task...wish it had a strikethrough!"
+        ns1.stringValue = "This is a cleared task...wish it had a strikethrough!"
+       
+        //Stores checked off next step into completed_next_steps, and moves array sequence up
+        ns_complete.insert(ns_list[0], at:0)
+        ns_list.removeFirst()
+        print (ns_list)
         
+        //Unchecks checkbox
+        checkbox1.state = 0
+        
+        ns_refresh()
     }
 
 
