@@ -37,28 +37,21 @@ class ViewController: NSViewController {
 
 //Set dummy values for tasks to help with display test
     
-    var ns_list = ["next step 1","next step 2","next step 3","next step 4","next step 5","next step 6"]
-    
-//    var ns_list = [String?]()
+    var ns_list = [String]()
     
     var ns_complete = [String?]()
     
 //Refresh Display of next steps
     func ns_refresh() {
-        for index in 0...5{
-            if ns_list[index] == nil{
-                ns_list[index] = ""
+        for index in 0...4{
+            //Iterates until end of array is reached and sets missing arrays to ""
+            if index < ns_list.count {
                 print (ns_list[index])
+            }else {
+                ns_list += [""]
             }
         }
-        
-        //refreshes 5 display fields
-/*        ns1.stringValue = ns_list[0]!
-        ns2.stringValue = ns_list[1]!
-        ns3.stringValue = ns_list[2]!
-        ns4.stringValue = ns_list[3]!
-        ns5.stringValue = ns_list[4]!
-*/
+
         ns1.stringValue = ns_list[0]
         ns2.stringValue = ns_list[1]
         ns3.stringValue = ns_list[2]
@@ -70,12 +63,11 @@ class ViewController: NSViewController {
 
 // Action on hitting enter key while in text entry field
     @IBAction func return_test(_ sender: Any) {
-        var name = next_step.stringValue
-        if name.isEmpty {
+        let item = next_step.stringValue
+        if item.isEmpty {
             error_label.stringValue = "Please enter your next step in the field below:"
         }
         else {
-            let item = name
             ns_list.insert(item, at:0)
             next_step.stringValue = ""
         }
@@ -87,11 +79,10 @@ class ViewController: NSViewController {
  
 // Action on clicking "enter" button
     @IBAction func ns_button(_ sender: Any) {
-        var name = next_step.stringValue
-        if name.isEmpty {
-            name = "Please enter your next step in the field below."
+        let item = next_step.stringValue
+        if item.isEmpty {
+            error_label.stringValue = "Please enter your next step in the field below."
         }
-        let item = name
         ns_list.insert(item, at:0)
         next_step.stringValue = ""
         
