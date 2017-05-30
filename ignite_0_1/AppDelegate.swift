@@ -15,13 +15,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
-        
-        if let button = statusItem.button {
-            button.image = NSImage(named:"checkbox")
-            button.title = "test"
-//            button.action = Selector("printQuote:")
-        }
 
 
     }

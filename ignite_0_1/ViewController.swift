@@ -20,6 +20,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var error_label: NSTextField!
     
     @IBOutlet weak var test2: NSScrollView!
+    let statusItem1 = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
+    let statusItem2 = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     
     @IBOutlet weak var bar_test1: NSTextField!
     
@@ -58,6 +60,15 @@ class ViewController: NSViewController {
         ns4.stringValue = ns_list[3]
         ns5.stringValue = ns_list[4]
 
+        if let menu_task = statusItem1.button {
+            menu_task.title = ns_list[0]
+        }
+        if let menu_checkbox = statusItem2.button {
+            menu_checkbox.image = NSImage(named:"checkbox")
+        }
+
+        // Eventually might add this back in if there is a sub-nav to the task...
+        //            button.action = Selector("printQuote:")
         return
     }
 
