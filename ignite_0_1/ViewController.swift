@@ -20,10 +20,12 @@ class ViewController: NSViewController {
     @IBOutlet weak var error_label: NSTextField!
     
     @IBOutlet weak var test2: NSScrollView!
+    @IBOutlet weak var bar_test1: NSTextField!
+
+    //Setup for menu_task which is statusItem1 and menu_checkbox which is statusItem2
     let statusItem1 = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     let statusItem2 = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     
-    @IBOutlet weak var bar_test1: NSTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,40 +39,80 @@ class ViewController: NSViewController {
         }
     }
 
-//Set dummy values for tasks to help with display test
+//Initialize arrays used to store next step list and next step completed list
     
     var ns_list = [String]()
     
     var ns_complete = [String?]()
     
+    
 //Refresh Display of next steps
     func ns_refresh() {
         for index in 0...4{
-            //Iterates until end of array is reached and sets missing arrays to ""
+            //Iterates until end of array is reached or reaches value of 4...whichever comes first
             if index < ns_list.count {
-                print (ns_list[index])
-            }else {
-                ns_list += [""]
+                
+                //Puts checkbox for next step in the menu bar, if there is room
+                if let menu_checkbox = statusItem2.button {
+                    menu_checkbox.image = NSImage(named:"checkbox")
+                    //    menu_checkbox.action = Selector(clear_ns(sender: as AnyObject))
+                }
+                
+                //Puts current next step into menu bar, if there is room
+                if let menu_task = statusItem1.button {
+                    menu_task.title = ns_list[0]
+                }
+                
+                //Put next step value into window and 5 slots available
+                switch index {
+                case 0:
+                    ns1.stringValue = ns_list[0]
+                case 1:
+                    ns2.stringValue = ns_list[1]
+                case 2:
+                    ns3.stringValue = ns_list[2]
+                case 3:
+                    ns4.stringValue = ns_list[3]
+                case 4:
+                    ns5.stringValue = ns_list[4]
+                default:
+                    print ("triggered default case")
+                }
+            }
+            else {
+                    switch index {
+                    case 0:
+                        ns1.stringValue = ""
+                    case 1:
+                        ns2.stringValue = ""
+                    case 2:
+                        ns3.stringValue = ""
+                    case 3:
+                        ns4.stringValue = ""
+                    case 4:
+                        ns5.stringValue = ""
+                    default:
+                        print ("triggered default case for blank")
+                    }
             }
         }
 
-        ns1.stringValue = ns_list[0]
-        ns2.stringValue = ns_list[1]
-        ns3.stringValue = ns_list[2]
-        ns4.stringValue = ns_list[3]
-        ns5.stringValue = ns_list[4]
-
-        if let menu_task = statusItem1.button {
-            menu_task.title = ns_list[0]
-        }
-        if let menu_checkbox = statusItem2.button {
-            menu_checkbox.image = NSImage(named:"checkbox")
-        }
-
-        // Eventually might add this back in if there is a sub-nav to the task...
-        //            button.action = Selector("printQuote:")
         return
     }
+ 
+//clear top next step from list and save to completed next steps list
+    func clear_ns() {
+        //Stores checked off next step into completed_next_steps, and moves array sequence up...checks to see if there is a value in the array at slot 0
+        if ns_list.isEmpty {
+        }
+        else {
+            ns_complete.insert(ns_list[0], at:0)
+            ns_list.removeFirst()
+            print (ns_list)
+        }
+        return
+    }
+
 
 // Action on hitting enter key while in text entry field
     @IBAction func return_test(_ sender: Any) {
@@ -79,7 +121,7 @@ class ViewController: NSViewController {
             error_label.stringValue = "Please enter your next step in the field below:"
         }
         else {
-            ns_list.insert(item, at:0)
+            ns_list.append(item)
             next_step.stringValue = ""
         }
         
@@ -94,7 +136,7 @@ class ViewController: NSViewController {
         if item.isEmpty {
             error_label.stringValue = "Please enter your next step in the field below."
         }
-        ns_list.insert(item, at:0)
+        ns_list.append(item)
         next_step.stringValue = ""
         
         ns_refresh()
@@ -115,10 +157,7 @@ class ViewController: NSViewController {
 */
         ns1.stringValue = "This is a cleared task...wish it had a strikethrough!"
        
-        //Stores checked off next step into completed_next_steps, and moves array sequence up
-        ns_complete.insert(ns_list[0], at:0)
-        ns_list.removeFirst()
-        print (ns_list)
+        clear_ns()
         
         //Unchecks checkbox
         checkbox1.state = 0

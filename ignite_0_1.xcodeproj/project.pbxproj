@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		592042D71F02AB87009E0B35 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592042D61F02AB87009E0B35 /* SQLite.framework */; };
 		59A4E6C21EBB7945002994C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A4E6C11EBB7945002994C8 /* AppDelegate.swift */; };
 		59A4E6C41EBB7945002994C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A4E6C31EBB7945002994C8 /* ViewController.swift */; };
 		59A4E6C61EBB7945002994C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59A4E6C51EBB7945002994C8 /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		592042D61F02AB87009E0B35 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
 		59A4E6BE1EBB7945002994C8 /* ignite_0_1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ignite_0_1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59A4E6C11EBB7945002994C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		59A4E6C31EBB7945002994C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -27,17 +29,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				592042D71F02AB87009E0B35 /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		592042D51F02AB86009E0B35 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				592042D61F02AB87009E0B35 /* SQLite.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		59A4E6B51EBB7945002994C8 = {
 			isa = PBXGroup;
 			children = (
 				59A4E6C01EBB7945002994C8 /* ignite_0_1 */,
 				59A4E6BF1EBB7945002994C8 /* Products */,
+				592042D51F02AB86009E0B35 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +83,7 @@
 				59A4E6BA1EBB7945002994C8 /* Sources */,
 				59A4E6BB1EBB7945002994C8 /* Frameworks */,
 				59A4E6BC1EBB7945002994C8 /* Resources */,
+				592042D81F02AB94009E0B35 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -127,6 +140,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		592042D81F02AB94009E0B35 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/SQLite.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		59A4E6BA1EBB7945002994C8 /* Sources */ = {
@@ -250,6 +280,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = QDD9D2G84D;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = ignite_0_1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "examen-tech.ignite-0-1";
@@ -264,6 +298,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = QDD9D2G84D;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = ignite_0_1/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "examen-tech.ignite-0-1";
@@ -291,6 +329,7 @@
 				59A4E6CF1EBB7946002994C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
