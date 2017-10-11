@@ -8,6 +8,8 @@
 
 import Cocoa
 
+import SQLite
+
 class ViewController: NSViewController {
 
     @IBOutlet weak var next_step: NSTextField!
@@ -29,9 +31,41 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-    }
+        //identify path to users Application Support sub-directory: /Users/csimpson/Library/Application Support/examen-tech.ignite-0-1
+        let path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first! + "/" + Bundle.main.bundleIdentifier!
+        
+        // create directory if it doesn’t exist
+        do {
+            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+        } catch let error as NSError {
+            print(error.localizedDescription);
+        }
+        
+        
+        let db: Connection
+        
+        do {
+            db = try Connection("\(path)/db.sqlite3")
+            print ("connected to ", path,"/db.sqlite3")
+        } catch {
+            //db = nil
+            print ("Unable to open database")
+        }
+
+        // initialize variables
+        let id = Expression<Int64>("id")
+        let dest_task = Expression<String>("dest_task")
+        let orig_task = Expression<String>("orig_task")
+        let next_step = Expression<String>("next_step")
+        let create_time = Expression<String>("create_time")
+        let start_time = Expression<Double>("start_time")
+        let stop_time = Expression<Double>("stop_time")
+        let done = Expression<Bool>("done")
+        let ns_list_tbl = Table("ns_list_tbl")
+        
+
+ }
 
     override var representedObject: Any? {
         didSet {
@@ -96,7 +130,34 @@ class ViewController: NSViewController {
                     }
             }
         }
-
+        
+        do {
+            try db.run(ns_list_tbl.create { t in     // CREATE TABLE "users" (
+                t.column(id, primaryKey: true)      //     "id" INTEGER PRIMARY KEY NOT NULL,
+                t.column(dest_task)
+                t.column(orig_task)
+                t.column(next_step)
+                t.column(create_time)
+                t.column(start_time)
+                t.column(stop_time)
+                t.column(done)
+            })
+        } catch {
+            print ("problem setting up table")
+        }
+        
+        //        let now = NSDate() //initialize time variable
+        /*
+         let insert = ns_list_tbl.insert(next_step <- "test of insert",create_time <- "11Jul2017")
+         do {
+         let rowid = try db.run(insert)
+         }
+         catch {
+         print ("Unable to insert record")
+         }
+         */
+        
+        
         return
     }
  
@@ -122,6 +183,8 @@ class ViewController: NSViewController {
         }
         else {
             ns_list.append(item)
+            
+
             next_step.stringValue = ""
         }
         
