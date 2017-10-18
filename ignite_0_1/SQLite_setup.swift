@@ -10,26 +10,40 @@ import Foundation
 import SQLite
 
 class SQLite_db {
-    
+    static let sharedInstance = SQLite_db()
+    let TTDB: Connection?
+    private init() {
+        
+        var path = "timetrackerDB.sqlite"
+        
+        //identify path to users Application Support sub-directory: /Users/csimpson/Documents/timetrackerDB.sqlite
+        if let dirs: [NSString] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true) as [NSString] {
+            let dir = dirs[0]
+            path = dir.appendingPathComponent("timetrackerDB.sqlite");
+        }
+        print (path)
+        do {
+            TTDB = try Connection(path)
+        } catch _ {
+            TTDB = nil
+        }
+    }
+        
+        
 }
 
-let instance = SQLite_db()
-private let db: Connection?
 
 
 /*
-import SQLite
-
-class dbops {
-    var path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first! + "/" + Bundle.main.bundleIdentifier!
-    
-    // create parent directory if it doesn’t exist
-    do {
-    try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-    } catch let error as NSError {
-        print (error.localizedDescription);
-    }
-    
+ Alternate Directory Creation code...revisit later
  
-}
+ //identify path to users Application Support sub-directory: /Users/csimpson/Library/Application Support/examen-tech.ignite-0-1
+ let path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first! + "/" + Bundle.main.bundleIdentifier!
+ 
+ // create directory if it doesn’t exist
+ do {
+ try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+ } catch let error as NSError {
+ print(error.localizedDescription);
+ }
 */

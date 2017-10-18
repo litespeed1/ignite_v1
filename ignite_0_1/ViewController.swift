@@ -32,26 +32,11 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        //identify path to users Application Support sub-directory: /Users/csimpson/Library/Application Support/examen-tech.ignite-0-1
-        let path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first! + "/" + Bundle.main.bundleIdentifier!
+        let dataStore = SQLite_db.sharedInstance
+
+        print("Finish")
         
-        // create directory if it doesn’t exist
-        do {
-            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-        } catch let error as NSError {
-            print(error.localizedDescription);
-        }
-        
-        
-        let db: Connection
-        
-        do {
-            db = try Connection("\(path)/db.sqlite3")
-            print ("connected to ", path,"/db.sqlite3")
-        } catch {
-            //db = nil
-            print ("Unable to open database")
-        }
+
 
         // initialize variables
         let id = Expression<Int64>("id")
@@ -130,9 +115,9 @@ class ViewController: NSViewController {
                     }
             }
         }
-        
+/*
         do {
-            try db.run(ns_list_tbl.create { t in     // CREATE TABLE "users" (
+            try TTDB.run(ns_list_tbl.create { t in     // CREATE TABLE "users" (
                 t.column(id, primaryKey: true)      //     "id" INTEGER PRIMARY KEY NOT NULL,
                 t.column(dest_task)
                 t.column(orig_task)
@@ -145,7 +130,7 @@ class ViewController: NSViewController {
         } catch {
             print ("problem setting up table")
         }
-        
+*/
         //        let now = NSDate() //initialize time variable
         /*
          let insert = ns_list_tbl.insert(next_step <- "test of insert",create_time <- "11Jul2017")
