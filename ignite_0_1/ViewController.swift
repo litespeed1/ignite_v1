@@ -25,8 +25,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var bar_test1: NSTextField!
 
     //Setup for menu_task which is statusItem1 and menu_checkbox which is statusItem2
-    let statusItem1 = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
-    let statusItem2 = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
+    let statusItem1 = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    let statusItem2 = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     
     override func viewDidLoad() {
@@ -34,20 +34,12 @@ class ViewController: NSViewController {
         // Do any additional setup after loading the view.
         let dataStore = SQLite_db.sharedInstance
 
-        print("Finish")
+        do {
+            try dataStore.createTables()
+//            setData()
+        } catch _ {}
         
-
-
-        // initialize variables
-        let id = Expression<Int64>("id")
-        let dest_task = Expression<String>("dest_task")
-        let orig_task = Expression<String>("orig_task")
-        let next_step = Expression<String>("next_step")
-        let create_time = Expression<String>("create_time")
-        let start_time = Expression<Double>("start_time")
-        let stop_time = Expression<Double>("stop_time")
-        let done = Expression<Bool>("done")
-        let ns_list_tbl = Table("ns_list_tbl")
+        print("Finish")
         
 
  }
@@ -61,9 +53,82 @@ class ViewController: NSViewController {
 //Initialize arrays used to store next step list and next step completed list
     
     var ns_list = [String]()
-    
     var ns_complete = [String?]()
+
     
+//Record items into DB
+    func ns_record(next_step: String) {
+/*        let DB = SQLite_db.sharedInstance.TTDB
+        var create_time = [String]()
+        let table = Table("ns_tbl")
+        let insert = table.insert(ns_id <- 1)
+        do {
+            let rowid = try DB.run(insert)
+        }
+        catch {
+            print ("Unable to insert record")
+        }
+        
+*/
+        print (next_step)
+
+        do {
+//            let now = NSDate() //initialize time variable
+
+            let new_record = try NextStepDataHelper.insert(some_data:
+                ns_array(
+                    ns_id: 1,
+                    dest_task: "a",
+                    orig_task: "b",
+                    next_step: next_step,
+                    create_time: 1234,
+                    start_time: 1,
+                    stop_time: 2,
+                    done: false
+                    )
+            )
+ 
+            print (new_record, next_step)
+        }
+        catch _{}
+
+    }
+    
+/*
+    func setData() {
+        do {
+            let bosId = try TeamDataHelper.insert(
+                Team(
+                    teamId: 0,
+                    city: "Boston",
+                    nickName: "Red Sox",
+                    abbreviation: "BOS"))
+            print(bosId)
+            
+            let ortizId = try PlayerDataHelper.insert(
+                Player(
+                    playerId: 0,
+                    firstName: "David",
+                    lastName: "Ortiz",
+                    number: 34,
+                    teamId: bosId,
+                    position: Positions.DesignatedHitter
+            ))
+            print(ortizId)
+            
+            let bogeyId = try PlayerDataHelper.insert(
+                Player(
+                    playerId: 0,
+                    firstName: "Xander",
+                    lastName: "Bogarts",
+                    number: 2,
+                    teamId: bosId,
+                    position: Positions.Shortstop
+            ))
+            print(bogeyId)
+            
+        } catch _{}
+*/
     
 //Refresh Display of next steps
     func ns_refresh() {
@@ -73,7 +138,7 @@ class ViewController: NSViewController {
                 
                 //Puts checkbox for next step in the menu bar, if there is room
                 if let menu_checkbox = statusItem2.button {
-                    menu_checkbox.image = NSImage(named:"checkbox")
+                    menu_checkbox.image = NSImage(named:NSImage.Name(rawValue: "checkbox"))
                     //    menu_checkbox.action = Selector(clear_ns(sender: as AnyObject))
                 }
                 
@@ -162,14 +227,15 @@ class ViewController: NSViewController {
 
 // Action on hitting enter key while in text entry field
     @IBAction func return_test(_ sender: Any) {
-        let item = next_step.stringValue
-        if item.isEmpty {
+        let input_value = next_step.stringValue
+        if input_value.isEmpty {
             error_label.stringValue = "Please enter your next step in the field below:"
         }
         else {
-            ns_list.append(item)
+            ns_list.append(input_value)
             
-
+            ns_record(next_step: input_value)
+            
             next_step.stringValue = ""
         }
         
@@ -180,15 +246,19 @@ class ViewController: NSViewController {
  
 // Action on clicking "enter" button
     @IBAction func ns_button(_ sender: Any) {
-        let item = next_step.stringValue
-        if item.isEmpty {
+        let input_value = next_step.stringValue
+        if input_value.isEmpty {
             error_label.stringValue = "Please enter your next step in the field below."
         }
-        ns_list.append(item)
-        next_step.stringValue = ""
+        else {
+            ns_list.append(input_value)
+            
+            ns_record(next_step: input_value)
+            
+            next_step.stringValue = ""
+        }
         
         ns_refresh()
-
     }
 
 //Insert action to strikethrough task when checkbox is clicked on...also would like to do when task has focus and enter is hit.  Should also reverse when clicked a second time.  current issue is it just posts the text "strikethrough"
@@ -208,7 +278,7 @@ class ViewController: NSViewController {
         clear_ns()
         
         //Unchecks checkbox
-        checkbox1.state = 0
+        checkbox1.state = NSControl.StateValue(rawValue: 0)
         
         ns_refresh()
     }

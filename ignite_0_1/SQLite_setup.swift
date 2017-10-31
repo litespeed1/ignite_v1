@@ -9,6 +9,14 @@
 import Foundation
 import SQLite
 
+enum DataAccessError: Error {
+    case Datastore_Connection_Error
+    case Insert_Error
+    case Delete_Error
+    case Search_Error
+    case Nil_In_Data
+}
+
 class SQLite_db {
     static let sharedInstance = SQLite_db()
     let TTDB: Connection?
@@ -28,9 +36,16 @@ class SQLite_db {
             TTDB = nil
         }
     }
+    func createTables() throws{
+        do {
+            try NextStepDataHelper.createTable()
+        } catch {
+            throw DataAccessError.Datastore_Connection_Error
+        }
         
-        
+    }
 }
+
 
 
 
