@@ -60,7 +60,15 @@ class NextStepDataHelper: DataHelperProtocol {
             throw DataAccessError.Datastore_Connection_Error
         }
         if (some_data.next_step != nil) {
-            let insert = table.insert(next_step <- some_data.next_step!, create_time <- some_data.create_time!)
+            let insert = table.insert(
+                dest_task <- some_data.dest_task!,
+                orig_task <- some_data.orig_task!,
+                next_step <- some_data.next_step!,
+                create_time <- some_data.create_time!,
+                start_time <- some_data.start_time!,
+                stop_time <- some_data.stop_time!,
+                done <- some_data.done!                
+            )
             do {
                 let rowId = try DB.run(insert)
                 guard rowId > 0 else {

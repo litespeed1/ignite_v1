@@ -70,13 +70,12 @@ class ViewController: NSViewController {
         }
         
 */
-        print (next_step)
 
         do {
 //            let now = NSDate() //initialize time variable
 
-            let new_record = try NextStepDataHelper.insert(some_data:
-                ns_array(
+            let data_row_id = try NextStepDataHelper.insert(some_data:
+                    (
                     ns_id: 1,
                     dest_task: "a",
                     orig_task: "b",
@@ -88,9 +87,11 @@ class ViewController: NSViewController {
                     )
             )
  
-            print (new_record, next_step)
+            print (next_step, "inserted at row id = ", data_row_id)
         }
-        catch _{}
+        catch _{
+            print (next_step, " failed to insert into database")
+        }
 
     }
     
