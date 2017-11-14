@@ -27,16 +27,17 @@ import Foundation
 
 //These are the table data structures/values
 
-// initialize variables
+// initialize data structures to pass from ViewController to DataHelper
 
 typealias ns_array = (
     ns_id: Int64?,
     dest_task: String?,
     orig_task: String?,
     next_step: String?,
-    create_time: Double?,
-    start_time: Double?,
-    stop_time: Double?,
+    create_time: Double?,   //stored as numberic from swift time reference
+    start_time: Double?,    //stored as numberic from swift time reference
+    elapsed_time: Double?,  //difference in seconds that task was actual the focus and active before completing
+    rank: Int,              //top 5 values appear in interface...full list in a separate "sorting" screen
     done: Bool?
 )
 

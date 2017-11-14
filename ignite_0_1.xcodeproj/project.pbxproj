@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		591158FA1F36259F00BE78F1 /* StephenCelisDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591158F91F36259F00BE78F1 /* StephenCelisDB.swift */; };
 		592042D71F02AB87009E0B35 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592042D61F02AB87009E0B35 /* SQLite.framework */; };
 		5952635F1F08145D0005097D /* SQLite_setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5952635E1F08145D0005097D /* SQLite_setup.swift */; };
 		599B74771F9B9D180053F233 /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599B74761F9B9D180053F233 /* DataHelper.swift */; };
@@ -19,7 +18,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		591158F91F36259F00BE78F1 /* StephenCelisDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StephenCelisDB.swift; sourceTree = "<group>"; };
 		592042D61F02AB87009E0B35 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/Mac/SQLite.framework; sourceTree = "<group>"; };
 		5952635E1F08145D0005097D /* SQLite_setup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLite_setup.swift; sourceTree = "<group>"; };
 		599B74761F9B9D180053F233 /* DataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
@@ -73,14 +71,13 @@
 			isa = PBXGroup;
 			children = (
 				59A4E6C11EBB7945002994C8 /* AppDelegate.swift */,
-				59A4E6C31EBB7945002994C8 /* ViewController.swift */,
 				59A4E6C51EBB7945002994C8 /* Assets.xcassets */,
 				59A4E6C71EBB7946002994C8 /* Main.storyboard */,
 				59A4E6CA1EBB7946002994C8 /* Info.plist */,
+				59A4E6C31EBB7945002994C8 /* ViewController.swift */,
 				599B74781F9B9D310053F233 /* DataModel.swift */,
 				599B74761F9B9D180053F233 /* DataHelper.swift */,
 				5952635E1F08145D0005097D /* SQLite_setup.swift */,
-				591158F91F36259F00BE78F1 /* StephenCelisDB.swift */,
 			);
 			path = ignite_0_1;
 			sourceTree = "<group>";
@@ -176,7 +173,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				591158FA1F36259F00BE78F1 /* StephenCelisDB.swift in Sources */,
 				59A4E6C41EBB7945002994C8 /* ViewController.swift in Sources */,
 				59A4E6C21EBB7945002994C8 /* AppDelegate.swift in Sources */,
 				5952635F1F08145D0005097D /* SQLite_setup.swift in Sources */,

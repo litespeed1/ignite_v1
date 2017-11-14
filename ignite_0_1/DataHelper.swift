@@ -13,9 +13,10 @@ protocol DataHelperProtocol {
     associatedtype T
     static func createTable() throws -> Void
     static func insert(some_data: T) throws -> Int64
-/*    static func delete(item: T) throws -> Void
-    static func findAll() throws -> [T]?
-*/
+    static func increment() throws -> Int
+//    static func delete(item: T) throws -> Void
+//    static func findAll() throws -> [T]?
+
 }
 
 
@@ -26,27 +27,29 @@ class NextStepDataHelper: DataHelperProtocol {
     static let dest_task = Expression<String?>("dest_task")
     static let orig_task = Expression<String?>("orig_task")
     static let next_step = Expression<String>("next_step")
-    static let create_time = Expression<Double>("create_time")
-    static let start_time = Expression<Double>("start_time")
-    static let stop_time = Expression<Double>("stop_time")
-    static let done = Expression<Bool>("done")
+    static let create_time = Expression<Double?>("create_time")
+    static let start_time = Expression<Double?>("start_time")
+    static let elapsed_time = Expression<Double?>("elapsed_time")
+    static let rank = Expression<Int?>("rank")
+    static let done = Expression<Bool?>("done")
     
     typealias T = ns_array
     
     static func createTable() throws {
-        guard let DB = SQLite_db.sharedInstance.TTDB else {
+        guard let db = SQLite_db.sharedInstance.TTDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
         do {
-            let _ = try DB.run( table.create(ifNotExists: true) {t in
+            let _ = try db.run( table.create(ifNotExists: true) {t in
                 t.column(ns_id, primaryKey: true)
-                t.column(dest_task)
-                t.column(orig_task)
+                t.column(dest_task, defaultValue: nil)
+                t.column(orig_task, defaultValue: nil)
                 t.column(next_step)
-                t.column(create_time)
-                t.column(start_time)
-                t.column(stop_time)
-                t.column(done)
+                t.column(create_time, defaultValue: nil)
+                t.column(start_time, defaultValue: nil)
+                t.column(elapsed_time, defaultValue: nil)
+                t.column(rank, defaultValue: nil)
+                t.column(done, defaultValue: nil)
             })
             
         } catch _ {
@@ -54,23 +57,24 @@ class NextStepDataHelper: DataHelperProtocol {
         }
         
 }
-
+    
+//Create new task row in ns_table
+    
     static func insert(some_data: T) throws -> Int64 {
-        guard let DB = SQLite_db.sharedInstance.TTDB else {
+        guard let db = SQLite_db.sharedInstance.TTDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
         if (some_data.next_step != nil) {
             let insert = table.insert(
-                dest_task <- some_data.dest_task!,
-                orig_task <- some_data.orig_task!,
+
                 next_step <- some_data.next_step!,
                 create_time <- some_data.create_time!,
                 start_time <- some_data.start_time!,
-                stop_time <- some_data.stop_time!,
-                done <- some_data.done!                
+                rank <- some_data.rank
+             
             )
             do {
-                let rowId = try DB.run(insert)
+                let rowId = try db.run(insert)
                 guard rowId > 0 else {
                     throw DataAccessError.Insert_Error
                 }
@@ -82,15 +86,58 @@ class NextStepDataHelper: DataHelperProtocol {
         throw DataAccessError.Nil_In_Data
         
     }
+    
+//Increment rank value prior to new task creation
+
+    static func increment() throws -> Int {
+        guard let db = SQLite_db.sharedInstance.TTDB else {
+            throw DataAccessError.Datastore_Connection_Error
+        }
+        do {
+            let non_zero_rank = table.filter(rank > 0)
+            let update_rank = non_zero_rank.update(rank <- rank + 1)
+            let rows_updated = try db.run(update_rank)
+            guard rows_updated > 0 else {
+                throw DataAccessError.update_error
+            }
+            print (rows_updated)
+            return rows_updated
+        } catch _ {
+            throw DataAccessError.update_error
+        }
+    }
+    
+    
+
 /*
+    static func find(id: Int64) throws -> T? {
+        guard let db = SQLite_db.sharedInstance.TTDB else {
+            throw DataAccessError.Datastore_Connection_Error
+        }
+        let query = table.filter(ns_id == id)
+        let items = try db.prepare(query)
+        let return_data: Double
+        for item in  items {
+            return (ns_id: item[ns_id], next_step: item[next_step], start_time: item[start_time])
+        }
+        
+        return nil
+        
+    }
+ */
+ 
+/*
+     
+     
+     
     static func delete (item: T) throws -> Void {
-        guard let DB = SQLiteDataStore.sharedInstance.BBDB else {
+        guard let db = SQLiteDataStore.sharedInstance.BBDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
         if let id = item.teamId {
             let query = table.filter(teamId == id)
             do {
-                let tmp = try DB.run(query.delete())
+                let tmp = try db.run(query.delete())
                 guard tmp == 1 else {
                     throw DataAccessError.Delete_Error
                 }
@@ -100,11 +147,11 @@ class NextStepDataHelper: DataHelperProtocol {
         }
 }
     static func find(id: Int64) throws -> T? {
-        guard let DB = SQLiteDataStore.sharedInstance.BBDB else {
+        guard let db = SQLiteDataStore.sharedInstance.BBDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
         let query = table.filter(teamId == id)
-        let items = try DB.prepare(query)
+        let items = try db.prepare(query)
         for item in  items {
             return Team(teamId: item[teamId] , city: item[city], nickName: item[nickName], abbreviation: item[abbreviation])
         }
@@ -114,11 +161,11 @@ class NextStepDataHelper: DataHelperProtocol {
     }
     
     static func findAll() throws -> [T]? {
-        guard let DB = SQLiteDataStore.sharedInstance.BBDB else {
+        guard let db = SQLiteDataStore.sharedInstance.BBDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
         var retArray = [T]()
-        let items = try DB.prepare(table)
+        let items = try db.prepare(table)
         for item in items {
             retArray.append(Team(teamId: item[teamId], city: item[city], nickName: item[nickName], abbreviation: item[abbreviation]))
         }

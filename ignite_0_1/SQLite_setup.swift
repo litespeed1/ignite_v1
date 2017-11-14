@@ -15,6 +15,7 @@ enum DataAccessError: Error {
     case Delete_Error
     case Search_Error
     case Nil_In_Data
+    case update_error
 }
 
 class SQLite_db {

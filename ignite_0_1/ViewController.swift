@@ -58,35 +58,25 @@ class ViewController: NSViewController {
     
 //Record items into DB
     func ns_record(next_step: String) {
-/*        let DB = SQLite_db.sharedInstance.TTDB
-        var create_time = [String]()
-        let table = Table("ns_tbl")
-        let insert = table.insert(ns_id <- 1)
-        do {
-            let rowid = try DB.run(insert)
-        }
-        catch {
-            print ("Unable to insert record")
-        }
-        
-*/
 
         do {
-//            let now = NSDate() //initialize time variable
+            let now = NSDate() //initialize time variable
+            
+            increment_rank() //+1 to all rank values in database, this should allow next insert to sit in #1 spot
 
             let data_row_id = try NextStepDataHelper.insert(some_data:
                     (
-                    ns_id: 1,
-                    dest_task: "a",
-                    orig_task: "b",
+                    ns_id: nil,
+                    dest_task: nil,
+                    orig_task: nil,
                     next_step: next_step,
-                    create_time: 1234,
-                    start_time: 1,
-                    stop_time: 2,
+                    create_time: now.timeIntervalSinceReferenceDate,
+                    start_time: now.timeIntervalSinceReferenceDate,
+                    elapsed_time: nil,
+                    rank: 1,
                     done: false
                     )
             )
- 
             print (next_step, "inserted at row id = ", data_row_id)
         }
         catch _{
@@ -95,41 +85,27 @@ class ViewController: NSViewController {
 
     }
     
-/*
-    func setData() {
+//Increment rank function
+    func increment_rank () {
+        print ("increment rank function has been called")
         do {
-            let bosId = try TeamDataHelper.insert(
-                Team(
-                    teamId: 0,
-                    city: "Boston",
-                    nickName: "Red Sox",
-                    abbreviation: "BOS"))
-            print(bosId)
+            let records_updated = try NextStepDataHelper.increment()
+
+/*
+            let db = SQLite_db.sharedInstance.TTDB
+            let rank = Expression<Int?>("rank")
+            let TABLE_NAME = "ns_tbl"
+            let table = Table(TABLE_NAME)
             
-            let ortizId = try PlayerDataHelper.insert(
-                Player(
-                    playerId: 0,
-                    firstName: "David",
-                    lastName: "Ortiz",
-                    number: 34,
-                    teamId: bosId,
-                    position: Positions.DesignatedHitter
-            ))
-            print(ortizId)
-            
-            let bogeyId = try PlayerDataHelper.insert(
-                Player(
-                    playerId: 0,
-                    firstName: "Xander",
-                    lastName: "Bogarts",
-                    number: 2,
-                    teamId: bosId,
-                    position: Positions.Shortstop
-            ))
-            print(bogeyId)
-            
-        } catch _{}
-*/
+            let records_updated = try db!.run(table.update(rank <- rank + 1))
+ 
+ */
+        print ("Number of records updated = ", records_updated)
+        } catch _ {
+            print ("no records updated")
+        }
+        
+    }
     
 //Refresh Display of next steps
     func ns_refresh() {
@@ -181,46 +157,22 @@ class ViewController: NSViewController {
                     }
             }
         }
-/*
-        do {
-            try TTDB.run(ns_list_tbl.create { t in     // CREATE TABLE "users" (
-                t.column(id, primaryKey: true)      //     "id" INTEGER PRIMARY KEY NOT NULL,
-                t.column(dest_task)
-                t.column(orig_task)
-                t.column(next_step)
-                t.column(create_time)
-                t.column(start_time)
-                t.column(stop_time)
-                t.column(done)
-            })
-        } catch {
-            print ("problem setting up table")
-        }
-*/
-        //        let now = NSDate() //initialize time variable
-        /*
-         let insert = ns_list_tbl.insert(next_step <- "test of insert",create_time <- "11Jul2017")
-         do {
-         let rowid = try db.run(insert)
-         }
-         catch {
-         print ("Unable to insert record")
-         }
-         */
-        
-        
+      
         return
     }
  
 //clear top next step from list and save to completed next steps list
     func clear_ns() {
         //Stores checked off next step into completed_next_steps, and moves array sequence up...checks to see if there is a value in the array at slot 0
+//        let now = NSDate()  //initialize time variable
+        
         if ns_list.isEmpty {
         }
         else {
             ns_complete.insert(ns_list[0], at:0)
             ns_list.removeFirst()
             print (ns_list)
+//            print (now2-read data from db for record at position 1)
         }
         return
     }
@@ -234,9 +186,7 @@ class ViewController: NSViewController {
         }
         else {
             ns_list.append(input_value)
-            
             ns_record(next_step: input_value)
-            
             next_step.stringValue = ""
         }
         
@@ -253,9 +203,7 @@ class ViewController: NSViewController {
         }
         else {
             ns_list.append(input_value)
-            
             ns_record(next_step: input_value)
-            
             next_step.stringValue = ""
         }
         
