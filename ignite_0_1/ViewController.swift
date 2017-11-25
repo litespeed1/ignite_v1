@@ -54,6 +54,8 @@ class ViewController: NSViewController {
     
     var ns_list = [String]()
     var ns_complete = [String?]()
+    var rankcounter = 1
+//    var some_data = ns_array
 
     
 //Record items into DB
@@ -62,8 +64,9 @@ class ViewController: NSViewController {
         do {
             let now = NSDate() //initialize time variable
             
-            increment_rank() //+1 to all rank values in database, this should allow next insert to sit in #1 spot
-
+//            increment_rank() //+1 to all rank values in database, this should allow next insert to sit in #1 spot
+            
+            
             let data_row_id = try NextStepDataHelper.insert(some_data:
                     (
                     ns_id: nil,
@@ -73,11 +76,12 @@ class ViewController: NSViewController {
                     create_time: now.timeIntervalSinceReferenceDate,
                     start_time: now.timeIntervalSinceReferenceDate,
                     elapsed_time: nil,
-                    rank: 1,
+                    rank: rankcounter,
                     done: false
                     )
             )
-            print (next_step, "inserted at row id = ", data_row_id)
+            rankcounter += 1
+//            print (next_step, "inserted at row id = ", data_row_id)
         }
         catch _{
             print (next_step, " failed to insert into database")
@@ -86,10 +90,10 @@ class ViewController: NSViewController {
     }
     
 //Increment rank function
-    func increment_rank () {
-        print ("increment rank function has been called")
+    func decrement_rank () {
+        print ("decrement rank function has been called")
         do {
-            let records_updated = try NextStepDataHelper.increment()
+            let records_updated = try NextStepDataHelper.decrement()
 
 /*
             let db = SQLite_db.sharedInstance.TTDB
@@ -109,6 +113,13 @@ class ViewController: NSViewController {
     
 //Refresh Display of next steps
     func ns_refresh() {
+
+        do {
+            let top5_list = try NextStepDataHelper.find(rank_in: 5)
+            print ("find function has run", top5_list)
+        } catch _ { print ("find query failed")}
+        
+    
         for index in 0...4{
             //Iterates until end of array is reached or reaches value of 4...whichever comes first
             if index < ns_list.count {
@@ -171,7 +182,9 @@ class ViewController: NSViewController {
         else {
             ns_complete.insert(ns_list[0], at:0)
             ns_list.removeFirst()
-            print (ns_list)
+            rankcounter -= 1
+            decrement_rank()
+            print (ns_list, rankcounter)
 //            print (now2-read data from db for record at position 1)
         }
         return

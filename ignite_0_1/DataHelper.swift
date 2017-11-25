@@ -13,7 +13,8 @@ protocol DataHelperProtocol {
     associatedtype T
     static func createTable() throws -> Void
     static func insert(some_data: T) throws -> Int64
-    static func increment() throws -> Int
+    static func decrement() throws -> Int
+    static func find(rank_in: Int) throws -> [String]
 //    static func delete(item: T) throws -> Void
 //    static func findAll() throws -> [T]?
 
@@ -89,13 +90,13 @@ class NextStepDataHelper: DataHelperProtocol {
     
 //Increment rank value prior to new task creation
 
-    static func increment() throws -> Int {
+    static func decrement() throws -> Int {
         guard let db = SQLite_db.sharedInstance.TTDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
         do {
             let non_zero_rank = table.filter(rank > 0)
-            let update_rank = non_zero_rank.update(rank <- rank + 1)
+            let update_rank = non_zero_rank.update(rank <- rank - 1)
             let rows_updated = try db.run(update_rank)
             guard rows_updated > 0 else {
                 throw DataAccessError.update_error
@@ -109,23 +110,21 @@ class NextStepDataHelper: DataHelperProtocol {
     
     
 
-/*
-    static func find(id: Int64) throws -> T? {
+
+    static func find(rank_in: Int) throws -> [String] {
         guard let db = SQLite_db.sharedInstance.TTDB else {
             throw DataAccessError.Datastore_Connection_Error
         }
-        let query = table.filter(ns_id == id)
-        let items = try db.prepare(query)
-        let return_data: Double
-        for item in  items {
-            return (ns_id: item[ns_id], next_step: item[next_step], start_time: item[start_time])
+//        let some_data: T
+        var get_list = [String]()
+        let rank_query = table.filter(rank <= rank_in && rank != 0)
+        let items = try db.prepare(rank_query)
+        for item in items {
+            get_list += [try item.get(next_step)]
         }
-        
-        return nil
-        
+        return get_list
     }
- */
- 
+    
 /*
      
      
